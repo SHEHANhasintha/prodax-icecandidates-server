@@ -4,7 +4,7 @@ let peerConnection = new RTCPeerConnection()
 let localStream;
 let remoteStream;
 
-var socket = io('http://localhost:3001');
+var socket = io('https://prodaxcameraclient.herokuapp.com/');
 socket.on('connect', () => {
   console.log(socket.id);
 //   socket.emit('my other event', { my: 'data' });
