@@ -38,7 +38,7 @@ let screenCount = 2;
 let init = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({
     video: true,
-    audio: false,
+    audio: true,
   });
   document.getElementById("user-1").srcObject = localStream;
   // document.getElementById('user-2').srcObject = remoteStream
