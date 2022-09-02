@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     if (connCounter > 0){
       console.log('offer')
       // socket.join('room1')
-      socket.broadcast.emit('room-connection', data)
+      socket.broadcast.to(data.room).emit('room-connection', data)
     } else {
       firstOne = socket.id;
     }
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
 
   socket.on('room-connection-answer', (data) => {
     console.log("answer")
-    socket.to(data.who).emit('room-connection-answer', data.answer)
+    socket.broadcast.emit('room-connection-answer', data.answer)
   })
   
   socket.on('disconnect', () => {
