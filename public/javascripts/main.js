@@ -5,7 +5,7 @@ console.log(peerConnection[0])
 let localStream;
 let remoteStream;
 
-var socket = io("https://prodaxcameraclient.herokuapp.com/");
+var socket = io("http://localhost:3001/");
 
 const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
