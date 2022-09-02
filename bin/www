@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
 
   socket.on('room-connection-answer', (data) => {
     console.log("answer")
-    socket.broadcast.emit('room-connection-answer', data.answer)
+    socket.to(data.who).emit('room-connection-answer', data.answer)
   })
   
   socket.on('disconnect', () => {
