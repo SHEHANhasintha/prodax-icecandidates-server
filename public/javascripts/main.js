@@ -1,7 +1,7 @@
 let peerConnections = []
 let peerConnection = new RTCPeerConnection();
 peerConnections.push(peerConnection)
-console.log(peerConnections[0])
+console.log(peerConnection[0])
 let localStream;
 let remoteStream;
 
@@ -46,10 +46,10 @@ let init = async () => {
   // newDiv.id = 'user-2'
 
   localStream.getTracks().forEach((track) => {
-    peerConnections[0].addTrack(track, localStream);
+    peerConnection.addTrack(track, localStream);
   });
 
-  peerConnections[0].ontrack = (event) => {
+  peerConnection.ontrack = (event) => {
     event.streams[0].getTracks().forEach((track) => {
       const newDiv = document.createElement("video");
       newDiv.setAttribute("autoplay", "true");
@@ -73,46 +73,46 @@ let init = async () => {
 };
 
 let createOffer = async () => {
-  peerConnections[0].onicecandidate = async (event) => {
+  peerConnection.onicecandidate = async (event) => {
     //Event that fires off when a new offer ICE candidate is created
     if (event.candidate) {
       document.getElementById("offer-sdp").value = JSON.stringify(
-        peerConnections[0].localDescription
+        peerConnection.localDescription
       );
       socket.emit("room-connection", {
-        offer: peerConnections[0].localDescription,
+        offer: peerConnection.localDescription,
         room,
         who: socket.id
       });
     }
   };
 
-  const offer = await peerConnections[0].createOffer();
-  await peerConnections[0].setLocalDescription(offer);
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
 };
 
 let createAnswer = async (data) => {
   // let offer = JSON.parse(document.getElementById('offer-sdp').value)
 
-  peerConnections[0].onicecandidate = async (event) => {
+  peerConnection.onicecandidate = async (event) => {
     //Event that fires off when a new answer ICE candidate is created
     if (event.candidate) {
       // console.log('Adding answer candidate...:', event.candidate)
       document.getElementById("answer-sdp").value = JSON.stringify(
-        peerConnections[0].localDescription
+        peerConnection.localDescription
       );
       socket.emit("room-connection-answer", {
-        answer: peerConnections[0].localDescription,
+        answer: peerConnection.localDescription,
         room,
         who: data.who
       });
     }
   };
 
-  await peerConnections[0].setRemoteDescription(data.offer);
+  await peerConnection.setRemoteDescription(data.offer);
 
-  let answer = await peerConnections[0].createAnswer(data.offer);
-  await peerConnections[0].setLocalDescription(answer);
+  let answer = await peerConnection.createAnswer(data.offer);
+  await peerConnection.setLocalDescription(answer);
   // console.log("answer")
 };
 
@@ -121,8 +121,8 @@ let addAnswer = async (answer) => {
   // let answer = JSON.parse(document.getElementById('answer-sdp').value)
   // answer = JSON.parse(answer)
   // console.log('answer:', answer)
-  if (!peerConnections[0].currentRemoteDescription) {
-    peerConnections[0].setRemoteDescription(answer);
+  if (!peerConnection.currentRemoteDescription) {
+    peerConnection.setRemoteDescription(answer);
   }
 };
 
