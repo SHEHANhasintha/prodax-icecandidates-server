@@ -21,11 +21,10 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-console.log(port, "posrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 
 var io = require('socket.io')(server,{
   cors: {
-    origin: [`https://prodaxcameraclient.herokuapp.com/`],
+    origin: ['https://prodaxcameraclient.herokuapp.com/'],
   }
 })
 
@@ -35,29 +34,38 @@ var secondOne;
 
 io.on('connection', (socket) => {
   connCounter++;
-  console.log(connCounter)
+  // console.log(socket)
   
-  socket.on('room-connection', (offer) => {
-    if (connCounter > 0){
-      // console.log(offer)
-      socket.broadcast.emit('room-connection', offer)
+  socket.on('join-room', (room) => {
+    console.log(room)
+    socket.join(room)
+  })
 
+  socket.on('room-connection', (data) => {
+    if (connCounter > 0){
+      console.log('offer')
+      // socket.join('room1')
+      socket.broadcast.to(data.room).emit('room-connection', data)
     } else {
       firstOne = socket.id;
     }
   })
 
-  socket.on('room-connection-answer', (answer) => {
-    console.log("answer", answer)
-    socket.broadcast.emit('room-connection-answer', answer)
+
+  socket.on('room-connection-answer', (data) => {
+    console.log("answer")
+    socket.to(data.who).emit('room-connection-answer', data.answer)
   })
   
   socket.on('disconnect', () => {
     connCounter--;
+    // socket.leave(firstOne)
     console.log(connCounter)
   })
 
 })
+
+
 
 
 
