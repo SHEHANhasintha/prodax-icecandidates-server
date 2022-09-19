@@ -24,7 +24,7 @@ var server = http.createServer(app);
 
 var io = require('socket.io')(server,{
   cors: {
-    origin: ['https://prodaxcameraclient.herokuapp.com/'],
+    origin: 'http://localhost:4200',
   }
 })
 
@@ -51,9 +51,15 @@ io.on('connection', (socket) => {
     }
   })
 
+
   socket.on('room-connection-answer', (data) => {
     console.log("answer",data.who)
     socket.broadcast.to(data.room).emit('room-connection-answer', data.answer)
+  })
+
+  socket.on('room-message-send', (data) => {
+    console.log(data)
+    socket.broadcast.to(data.room).emit('room-message-send', data)
   })
   
   socket.on('disconnect', () => {

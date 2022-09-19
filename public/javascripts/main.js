@@ -5,7 +5,7 @@ console.log(peerConnection[0])
 let localStream;
 let remoteStream;
 
-var socket = io("https://prodaxcameraclient.herokuapp.com/");
+var socket = io("http://localhost:3001/");
 
 const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
@@ -33,12 +33,14 @@ socket.on("room-connection-answer", (answer) => {
   addAnswer(answer);
 });
 
+
+
 let screenCount = 2;
 
 let init = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({
     video: true,
-    audio: true,
+    audio: false,
   });
   document.getElementById("user-1").srcObject = localStream;
   // document.getElementById('user-2').srcObject = remoteStream
